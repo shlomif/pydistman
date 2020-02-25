@@ -37,6 +37,8 @@ def main():
     _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
     _append("sum_walker/tests/test_sum_walker.py",
             "code/tests/test_sum_walker.py")
+    from subprocess import check_call
+    check_call(["bash", "-c", "cd sum_walker && python3 setup.py test"])
 
 
 main()

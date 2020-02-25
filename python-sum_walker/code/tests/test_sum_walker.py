@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-test_modint
+test_sum_walker
 ----------------------------------
 
-Tests for `modint` module.
+Tests for `sum_walker` module.
 """
 
 import pytest
 
-from modint import ChineseRemainderConstructor, chinese_remainder
+from sum_walker import SumStream
 
 
 @pytest.fixture
@@ -20,18 +20,21 @@ def response():
     """
 
 
-def test_modint():
+def test_sum_walker():
     """Sample pytest test function with the pytest fixture as an argument.
     """
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
-    cr = ChineseRemainderConstructor([3, 5])
-    assert cr.rem([1, 1]) == 1
 
-    cr = ChineseRemainderConstructor([2, 5])
-    assert cr.rem([1, 0]) == 5
-    assert cr.rem([0, 3]) == 8
+    seq = list(range(1, 100))
+    cnt = 2
 
-    assert chinese_remainder([2, 5], [1, 0]) == 5
+    def request_more():
+        nonlocal seq
+        seq.append(seq[-1] + 1)
 
-    assert chinese_remainder([2, 3, 7], [1, 2, 3]) == 17
+    w = SumStream(cnt, seq, request_more)
+
+    def _next():
+        sum_, coords, _ = next(w)
+        return (sum_, coords)
+
+    assert _next(w) == (2, [[0, 0]])
