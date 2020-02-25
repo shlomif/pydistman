@@ -35,6 +35,13 @@ def main():
         open(to, "at").write(open(from_, "rt").read())
 
     _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
+    chglog = "sum_walker/CHANGELOG.rst"
+    txt = open(chglog, "rt").read()
+    import re
+    txt = re.sub("\n0\\.1\\.0\n.*", "\n" + open(
+        "code/CHANGELOG.rst.base.txt", "rt").read(), txt, re.M | re.S)
+    open(chglog, "wt").write(txt)
+
     testfn = "sum_walker/tests/test_sum_walker.py"
     _append(testfn,
             "code/tests/test_sum_walker.py")
