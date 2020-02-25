@@ -10,14 +10,12 @@ Tests for `sum_walker` module.
 
 import pytest
 
-from sum_walker import SumStream
+from sum_walker import StreamCombiner, StreamGrouper, SumStream
 
 
 def test_sum_walker():
     """Sample pytest test function with the pytest fixture as an argument.
     """
-    assert False
-
     seq = list(range(1, 100))
     cnt = 2
 
@@ -25,10 +23,10 @@ def test_sum_walker():
         nonlocal seq
         seq.append(seq[-1] + 1)
 
-    w = SumStream(cnt, seq, request_more)
-
-    def _next():
-        sum_, coords, _ = next(w)
+    def _next(w):
+        sum_, coords = next(w)
         return (sum_, coords)
 
-    assert _next(w) == (1, [[0, 0]])
+    w = StreamGrouper(StreamCombiner([SumStream(cnt, seq, request_more)]))
+
+    assert _next(w) == (2, [[0, 0]])
