@@ -38,6 +38,9 @@ def main():
     testfn = "sum_walker/tests/test_sum_walker.py"
     _append(testfn,
             "code/tests/test_sum_walker.py")
+    open("sum_walker/tox.ini", "wt").write(
+        "[tox]\nenvlist = py38\n\n" +
+        """[testenv]\ndeps =\n\tpytest\n\tpytest-cov\ncommands = pytest\n""")
     import os
     os.chmod(testfn, 0o755)
     from subprocess import check_call

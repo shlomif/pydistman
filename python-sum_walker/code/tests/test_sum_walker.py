@@ -13,13 +13,6 @@ import pytest
 from sum_walker import SumStream
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-
-
 def test_sum_walker():
     """Sample pytest test function with the pytest fixture as an argument.
     """
