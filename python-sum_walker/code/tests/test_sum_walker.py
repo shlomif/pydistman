@@ -23,6 +23,7 @@ def response():
 def test_sum_walker():
     """Sample pytest test function with the pytest fixture as an argument.
     """
+    assert False
 
     seq = list(range(1, 100))
     cnt = 2
