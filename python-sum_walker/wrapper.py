@@ -13,7 +13,7 @@ def main():
     cookiecutter.main.cookiecutter(
         'gh:Kwpolska/python-project-template',
         overwrite_if_exists=True,
-        extra_defaults={
+        extra_context={
             },
         )
 
