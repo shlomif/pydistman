@@ -30,6 +30,9 @@ def main():
             'github_username': "shlomif",
             },
         )
+    open("sum_walker/sum_walker/__init__.py", "at").write(
+        open("code/sum_walker/__init__.py", "rt").read()
+    )
 
 
 main()
