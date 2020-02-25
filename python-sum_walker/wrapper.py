@@ -35,10 +35,13 @@ def main():
         open(to, "at").write(open(from_, "rt").read())
 
     _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
-    _append("sum_walker/tests/test_sum_walker.py",
+    testfn = "sum_walker/tests/test_sum_walker.py"
+    _append(testfn,
             "code/tests/test_sum_walker.py")
+    import os
+    os.chmod(testfn, 0o755)
     from subprocess import check_call
-    check_call(["bash", "-c", "cd sum_walker && python3 setup.py test"])
+    check_call(["bash", "-c", "cd sum_walker && tox"])
 
 
 main()

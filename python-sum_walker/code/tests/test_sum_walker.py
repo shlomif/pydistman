@@ -37,4 +37,4 @@ def test_sum_walker():
         sum_, coords, _ = next(w)
         return (sum_, coords)
 
-    assert _next(w) == (2, [[0, 0]])
+    assert _next(w) == (1, [[0, 0]])
