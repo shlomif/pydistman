@@ -30,9 +30,13 @@ def main():
             'github_username': "shlomif",
             },
         )
-    open("sum_walker/sum_walker/__init__.py", "at").write(
-        open("code/sum_walker/__init__.py", "rt").read()
-    )
+
+    def _append(to, from_):
+        open(to, "at").write(open(from_, "rt").read())
+
+    _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
+    _append("sum_walker/tests/test_sum_walker.py",
+            "code/tests/test_sum_walker.py")
 
 
 main()
