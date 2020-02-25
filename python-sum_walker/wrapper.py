@@ -14,6 +14,7 @@ def main():
         'gh:Kwpolska/python-project-template',
         overwrite_if_exists=True,
         extra_context={
+            'full_name':'Shlomi Fish',
             },
         )
 
