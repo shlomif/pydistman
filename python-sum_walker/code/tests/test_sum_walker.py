@@ -30,3 +30,5 @@ def test_sum_walker():
     w = StreamGrouper(StreamCombiner([SumStream(cnt, seq, request_more)]))
 
     assert _next(w) == (2, [[0, 0]])
+    assert _next(w) == (3, [[0, 1]])
+    assert _next(w) == (4, [[0, 2], [1, 1], ])
