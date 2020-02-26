@@ -156,3 +156,20 @@ def SumStream(cnt, seq, request_more):
 
     """
     return _InternalSumStream(seq, [0]*cnt, cnt-1, request_more)
+
+
+def DWIM_SumWalker(cnt, seq, request_more):
+    """Creates a stream of non-decreasing sums of cnt elements out of seq.
+    While handling the grouping and combining.
+
+    :param cnt: the count of elements
+    :type cnt: int
+    :param seq: a list of increasing integers
+    :type seq: list
+    :param request_more: a callback to request that more elements should be
+    added to seq
+    :type request_more: function
+
+    """
+    return StreamGrouper(StreamCombiner(
+            [SumStream(cnt, seq, request_more)]))

@@ -10,6 +10,7 @@ Tests for `sum_walker` module.
 
 import pytest
 
+import sum_walker
 from sum_walker import StreamCombiner, StreamGrouper, SumStream
 
 
@@ -27,8 +28,16 @@ def test_sum_walker():
         sum_, coords = next(w)
         return (sum_, coords)
 
-    w = StreamGrouper(StreamCombiner([SumStream(cnt, seq, request_more)]))
+    def create1():
+        return StreamGrouper(StreamCombiner(
+            [SumStream(cnt, seq, request_more)]))
 
-    assert _next(w) == (2, [[0, 0]])
-    assert _next(w) == (3, [[0, 1]])
-    assert _next(w) == (4, [[0, 2], [1, 1], ])
+    def create2():
+        return sum_walker.DWIM_SumWalker(cnt, seq, request_more)
+
+    for builder in [create1, create2]:
+        w = builder()
+
+        assert _next(w) == (2, [[0, 0]])
+        assert _next(w) == (3, [[0, 1]])
+        assert _next(w) == (4, [[0, 2], [1, 1], ])
