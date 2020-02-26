@@ -5,6 +5,9 @@
 # Copyright © 2020 Shlomi Fish <shlomif@cpan.org>
 #
 # Distributed under terms of the MIT license.
+#
+# See:
+# https://en.wikipedia.org/wiki/Taxicab_number
 
 from six import print_
 
