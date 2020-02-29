@@ -1,2 +1,5 @@
+0.4.0
+    Made the streams iterable (e.g: "for x in stream:").
+
 0.2.0
     Initial release.

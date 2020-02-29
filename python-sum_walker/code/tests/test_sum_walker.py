@@ -35,9 +35,24 @@ def test_sum_walker():
     def create2():
         return sum_walker.DWIM_SumWalker(cnt, seq, request_more)
 
-    for builder in [create1, create2]:
-        w = builder()
-
+    def test_next(w):
         assert _next(w) == (2, [[0, 0]])
         assert _next(w) == (3, [[0, 1]])
         assert _next(w) == (4, [[0, 2], [1, 1], ])
+
+    def test_for(w):
+        i = 0
+        for sum_, coords in w:
+            pair = (sum_, coords)
+            if i == 0:
+                assert pair == (2, [[0, 0]])
+            elif i == 1:
+                assert pair == (3, [[0, 1]])
+            elif i == 2:
+                assert pair == (4, [[0, 2], [1, 1], ])
+            else:
+                break
+            i += 1
+    for tester in [test_next, test_for]:
+        for builder in [create1, create2]:
+            tester(builder())

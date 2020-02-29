@@ -23,7 +23,12 @@
 import heapq
 
 
-class StreamCombiner(object):
+class _MyIterable(object):
+    def __iter__(self):
+        return self
+
+
+class StreamCombiner(_MyIterable):
     """Combines several non-decreasing streams of sums into one
     non-decreasing stream of sums.
 
@@ -53,7 +58,7 @@ class StreamCombiner(object):
         return (sum_, coords, stream)
 
 
-class StreamGrouper(object):
+class StreamGrouper(_MyIterable):
     """Groups sums together and returns tuples with the sums and lists of
     coordinates lists.
     :param stream: the base stream of coordinates
@@ -74,7 +79,7 @@ class StreamGrouper(object):
         return (sum_, sorted(retcoords))
 
 
-class _PrivateWrapper(object):
+class _PrivateWrapper(_MyIterable):
     def __init__(self, _delegate):
         self._delegate = _delegate
 
@@ -83,7 +88,7 @@ class _PrivateWrapper(object):
         return (sum_, coords, self)
 
 
-class _InternalSumStream(object):
+class _InternalSumStream(_MyIterable):
     def __init__(self, seq, coords, coord_idx, request_more):
         self._coords = coords
         self._seq = seq
