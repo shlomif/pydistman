@@ -180,7 +180,7 @@ class _InternalSumStream(_MyIterable):
 
     def __getstate__(self):
         ret = self.__dict__.copy()
-        del ret['_request_more']
+        ret['_request_more'] = None
         return ret
 
 

@@ -8,6 +8,8 @@ test_sum_walker
 Tests for `sum_walker` module.
 """
 
+import pickle
+
 import pytest
 
 import sum_walker
@@ -56,3 +58,13 @@ def test_sum_walker():
     for tester in [test_next, test_for]:
         for builder in [create1, create2]:
             tester(builder())
+
+    def _calc_state():
+        walker = create2()
+        for i in range(3):
+            next(walker)
+        return pickle.dumps(walker)
+
+    state = _calc_state()
+    newwalker = pickle.loads(state)
+    assert next(newwalker) == (5, [[0, 3], [1, 2], ])
