@@ -1,5 +1,9 @@
 0.4.0
     Made the streams iterable (e.g: "for x in stream:").
 
+    Implement support for pickling/unpickling and possibly other methods
+    for coarse grained persistence and serialization.
+    See: https://docs.python.org/3/library/pickle.html .
+
 0.2.0
     Initial release.
