@@ -27,6 +27,22 @@ class _MyIterable(object):
     def __iter__(self):
         return self
 
+    def set_request_more(self, request_more, seq, stack=None):
+        if stack is None:
+            stack = []
+        if self in stack:
+            return
+        newstack = stack + [self]
+        self._set_self_request_more(request_more, seq)
+        for obj in self._get_request_more_childs():
+            obj.set_request_more(request_more, seq, newstack)
+
+    def _set_self_request_more(self, request_more, seq):
+        return
+
+    def _get_request_more_childs(self):
+        return []
+
 
 class StreamCombiner(_MyIterable):
     """Combines several non-decreasing streams of sums into one
@@ -57,6 +73,9 @@ class StreamCombiner(_MyIterable):
             pass
         return (sum_, coords, stream)
 
+    def _get_request_more_childs(self):
+        return [stream for _, _, stream in self._queue]
+
 
 class StreamGrouper(_MyIterable):
     """Groups sums together and returns tuples with the sums and lists of
@@ -78,6 +97,9 @@ class StreamGrouper(_MyIterable):
         self._current = (nextsum_, newcoords, stream)
         return (sum_, sorted(retcoords))
 
+    def _get_request_more_childs(self):
+        return [self._stream]
+
 
 class _PrivateWrapper(_MyIterable):
     def __init__(self, _delegate):
@@ -87,13 +109,19 @@ class _PrivateWrapper(_MyIterable):
         sum_, coords, _ = self._delegate._private_next()
         return (sum_, coords, self)
 
+    def _get_request_more_childs(self):
+        return [self._delegate]
+
 
 class _InternalSumStream(_MyIterable):
+    def _set_self_request_more(self, request_more, seq):
+        self._request_more = request_more
+        self._seq = seq
+
     def __init__(self, seq, coords, coord_idx, request_more):
         self._coords = coords
-        self._seq = seq
+        self._set_self_request_more(request_more, seq)
         self._coord_idx = coord_idx
-        self._request_more = request_more
         self._current = (
             sum([self._seq[x] for x in self._coords]), self._coords[:], self)
         self.combiner = StreamCombiner([_PrivateWrapper(self)])
@@ -146,6 +174,14 @@ class _InternalSumStream(_MyIterable):
 
     def __next__(self):
         return next(self.combiner)
+
+    def _get_request_more_childs(self):
+        return [self.combiner]
+
+    def __getstate__(self):
+        ret = self.__dict__.copy()
+        del ret['_request_more']
+        return ret
 
 
 def SumStream(cnt, seq, request_more):

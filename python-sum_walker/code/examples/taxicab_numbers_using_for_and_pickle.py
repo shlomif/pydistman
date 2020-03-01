@@ -32,6 +32,10 @@ def main():
     if os.path.exists(fn):
         with open(fn, 'rb') as f:
             [it, seq] = pickle.load(f)
+
+            def request_more():
+                return seq.request_more()
+            it.set_request_more(request_more, seq.seq)
     else:
         seq = Seq()
 
