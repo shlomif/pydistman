@@ -67,4 +67,5 @@ def test_sum_walker():
 
     state = _calc_state()
     newwalker = pickle.loads(state)
+    newwalker.set_request_more(request_more, seq)
     assert next(newwalker) == (5, [[0, 3], [1, 2], ])
