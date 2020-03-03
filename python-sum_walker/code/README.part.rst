@@ -13,6 +13,8 @@ pip3 install sum_walker
 USAGE
 -----
 
+::
+
     # Finding sums of 2 powers of 3:
     # https://en.wikipedia.org/wiki/Taxicab_number
     from sum_walker import DWIM_SumWalker
