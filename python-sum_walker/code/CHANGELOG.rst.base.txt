@@ -1,3 +1,6 @@
+0.6.1
+    Apply meaningful text change to docs/README.rst as well.
+
 0.6.0
     Add meaningful text to README and README.rst.
 

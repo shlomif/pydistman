@@ -22,7 +22,7 @@ def main():
                  " number of elements"),
             "release_date": "2020-02-25",
             "repo_name": "sum_walker",
-            "version": "0.6.0",
+            "version": "0.6.1",
             "year": "2020",
             'aur_email': "shlomif@cpan.org",
             'email': "shlomif@cpan.org",
@@ -47,7 +47,8 @@ def main():
         open(fn, "wt").write(txt)
     _re_mutate(chglog, "\n0\\.1\\.0\n.*", "code/CHANGELOG.rst.base.txt", "\n")
     s = "COPYRIGHT\n"
-    for fn in ["sum_walker/README", "sum_walker/README.rst"]:
+    for fn in ["sum_walker/README", "sum_walker/README.rst",
+               "sum_walker/docs/README.rst", ]:
         _re_mutate(fn, "^PURPOSE\n.*?\n" + s, "code/README.part.rst", '', s)
 
     testfn = "sum_walker/tests/test_sum_walker.py"
