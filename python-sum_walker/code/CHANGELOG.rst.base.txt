@@ -1,3 +1,6 @@
+0.6.0
+    Add meaningful text to README and README.rst.
+
 0.4.0
     Made the streams iterable (e.g: "for x in stream:").
 
