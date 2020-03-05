@@ -4,7 +4,10 @@
 #
 # Copyright © 2020 Shlomi Fish <shlomif@cpan.org>
 #
-# Distributed under terms of the MIT license.
+# Distributed under the terms of the MIT license.
+#
+# This program finds numbers that are expressible as the sum of two integer
+# cubes in two or more ways.
 #
 # See:
 # https://en.wikipedia.org/wiki/Taxicab_number
