@@ -1,3 +1,6 @@
+0.6.2
+    Escape backslashes properly.
+
 0.6.1
     Apply meaningful text change to docs/README.rst as well.
 
