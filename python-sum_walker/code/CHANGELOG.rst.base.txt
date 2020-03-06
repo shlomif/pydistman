@@ -1,3 +1,7 @@
+0.6.3
+    Escape backslashes properly in the code excerpts (hopefully for real this
+    time).
+
 0.6.2
     Escape backslashes properly.
 

@@ -22,7 +22,7 @@ def main():
                  " number of elements"),
             "release_date": "2020-02-25",
             "repo_name": "sum_walker",
-            "version": "0.6.2",
+            "version": "0.6.3",
             "year": "2020",
             'aur_email': "shlomif@cpan.org",
             'email': "shlomif@cpan.org",
@@ -40,9 +40,9 @@ def main():
     def _re_mutate(fn, pattern, repl_fn, prefix='', suffix=''):
         txt = open(fn, "rt").read()
         import re
-        txt, count = re.subn(pattern, prefix + open(
-            repl_fn, "rt").read() + suffix,
-            txt.replace('\\', '\\\\'), 1, re.M | re.S)
+        txt, count = re.subn(pattern, (prefix + open(
+            repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
+            txt, 1, re.M | re.S)
         # print(count)
         assert count == 1
         open(fn, "wt").write(txt)
