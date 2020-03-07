@@ -1,3 +1,6 @@
+0.6.4
+    Add the two integers' sums example
+
 0.6.3
     Escape backslashes properly in the code excerpts (hopefully for real this
     time).
