@@ -88,3 +88,13 @@ def test_iterator_wrapper():
     for x in elems1[0]:
         assert x.coord == 0
         assert x.value == 1
+    sum2, elems2 = next(walker)
+    assert sum2 == 3
+    assert len(elems2) == 1
+    assert len(elems2[0]) == 2
+    for x in [elems2[0][0]]:
+        assert x.coord == 0
+        assert x.value == 1
+    for x in [elems2[0][1]]:
+        assert x.coord == 1
+        assert x.value == 2

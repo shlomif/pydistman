@@ -22,7 +22,7 @@ def main():
                  " number of elements"),
             "release_date": "2020-02-25",
             "repo_name": "sum_walker",
-            "version": "0.6.4",
+            "version": "0.8.0",
             "year": "2020",
             'aur_email': "shlomif@cpan.org",
             'email': "shlomif@cpan.org",
