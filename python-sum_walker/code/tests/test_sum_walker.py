@@ -94,3 +94,12 @@ def test_iterator_wrapper():
 
     mytest(walker, 2, [[{"c": 0, "v": 1}, {"c": 0, "v": 1}]])
     mytest(walker, 3, [[{"c": 0, "v": 1}, {"c": 1, "v": 2}]])
+
+    walker = sum_walker.iterator_wrapper.Walker(
+        counts=[2, 3], iterator=natural_nums_iter())
+
+    mytest(walker, 2, [[{"c": 0, "v": 1}, {"c": 0, "v": 1}]])
+    mytest(walker, 3, [
+        [{"c": 0, "v": 1}, {"c": 0, "v": 1}, {"c": 0, "v": 1}, ],
+        [{"c": 0, "v": 1}, {"c": 1, "v": 2}, ],
+        ])
