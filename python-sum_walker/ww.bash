@@ -7,4 +7,5 @@
 #
 
 rm -fr ~/.cookiecutters/python-project-template/
+rm -fr sum_walker/
 exec python3 wrapper.py "$@"
