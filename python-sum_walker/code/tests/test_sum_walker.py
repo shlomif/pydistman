@@ -10,9 +10,10 @@ Tests for `sum_walker` module.
 
 import pickle
 
-import pytest
+import pytest  # noqa: F401
 
 import sum_walker
+import sum_walker.iterator_wrapper
 from sum_walker import StreamCombiner, StreamGrouper, SumStream
 
 
@@ -69,3 +70,21 @@ def test_sum_walker():
     newwalker = pickle.loads(state)
     newwalker.set_request_more(request_more, seq)
     assert next(newwalker) == (5, [[0, 3], [1, 2], ])
+
+
+def test_iterator_wrapper():
+    def natural_nums_iter():
+        ret = 1
+        while True:
+            yield ret
+            ret += 1
+
+    walker = sum_walker.iterator_wrapper.Walker(
+        counts=[2], iterator=natural_nums_iter())
+    sum1, elems1 = next(walker)
+    assert sum1 == 2
+    assert len(elems1) == 1
+    assert len(elems1[0]) == 2
+    for x in elems1[0]:
+        assert x.coord == 0
+        assert x.value == 1

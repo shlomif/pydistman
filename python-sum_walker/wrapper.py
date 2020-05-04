@@ -35,6 +35,8 @@ def main():
         open(to, "at").write(open(from_, "rt").read())
 
     _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
+    _append("sum_walker/sum_walker/iterator_wrapper.py",
+            "code/sum_walker/iterator_wrapper.py")
     chglog = "sum_walker/CHANGELOG.rst"
 
     def _re_mutate(fn, pattern, repl_fn, prefix='', suffix=''):
