@@ -31,17 +31,17 @@ class Walker(object):
 
     def __iter__(self):
         return self
-    """Creates a stream of non-decreasing sums of cnt elements out of seq.
-    While handling the grouping and combining.
+    """Creates a stream of non-decreasing sums of counts elements out of the iterator.
 
-    :param cnt: the count of elements
-    :type cnt: int
-    :param seq: a list of increasing integers
-    :type seq: list
-    :param request_more: a callback to request that more elements should be
-    added to seq
-    :type request_more: function
+    :param counts: the counts of elements
+    :type counts: list
+    :param iterator: an iterator that returns increasing and positive integers
+    :type iterator: an iterable
 
+    This is a wrapper around sum_walker.
+
+    Iterating it returns a sum followed by a list of lists of items
+    containing .coord and .value .
     """
     def __init__(self, counts, iterator):
         self._values = []
