@@ -79,8 +79,19 @@ def test_iterator_wrapper():
             yield ret
             ret += 1
 
+    def mytest(walker, wanted_sum, wanted_combis):
+        sum2, elems2 = next(walker)
+        assert sum2 == wanted_sum
+        assert len(elems2) == len(wanted_combis)
+        for (idx, want), have in zip(enumerate(wanted_combis), elems2):
+            assert len(want) == len(have)
+            for elem_idx, (w, h) in enumerate(zip(want, have)):
+                assert h.coord == w['c']
+                assert h.value == w['v']
+
     walker = sum_walker.iterator_wrapper.Walker(
         counts=[2], iterator=natural_nums_iter())
+
     sum1, elems1 = next(walker)
     assert sum1 == 2
     assert len(elems1) == 1
@@ -88,13 +99,4 @@ def test_iterator_wrapper():
     for x in elems1[0]:
         assert x.coord == 0
         assert x.value == 1
-    sum2, elems2 = next(walker)
-    assert sum2 == 3
-    assert len(elems2) == 1
-    assert len(elems2[0]) == 2
-    for x in [elems2[0][0]]:
-        assert x.coord == 0
-        assert x.value == 1
-    for x in [elems2[0][1]]:
-        assert x.coord == 1
-        assert x.value == 2
+    mytest(walker, 3, [[{"c": 0, "v": 1}, {"c": 1, "v": 2}]])
