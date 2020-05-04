@@ -1,3 +1,8 @@
+0.8.1
+    Reduce the size of erroneously appended files.
+
+    Add more tests for sum_walker.iterator_wrapper
+
 0.8.0
     Add sum_walker.iterator_wrapper
 
