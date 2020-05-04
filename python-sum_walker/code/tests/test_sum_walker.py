@@ -92,11 +92,5 @@ def test_iterator_wrapper():
     walker = sum_walker.iterator_wrapper.Walker(
         counts=[2], iterator=natural_nums_iter())
 
-    sum1, elems1 = next(walker)
-    assert sum1 == 2
-    assert len(elems1) == 1
-    assert len(elems1[0]) == 2
-    for x in elems1[0]:
-        assert x.coord == 0
-        assert x.value == 1
+    mytest(walker, 2, [[{"c": 0, "v": 1}, {"c": 0, "v": 1}]])
     mytest(walker, 3, [[{"c": 0, "v": 1}, {"c": 1, "v": 2}]])
