@@ -28,25 +28,25 @@ A simple example of printing sums of two integers:
     # This program displays increasing sums of two positive integers
 
     from six import print_
-
-    from sum_walker import DWIM_SumWalker
+    import sum_walker.iterator_wrapper
 
 
     def main():
-        seq = [1, 2, 3, 4]
+        def natural_nums_iter():
+            ret = 1
+            while True:
+                yield ret
+                ret += 1
 
-        def request_more():
-            nonlocal seq
-            seq.append(seq[-1] + 1)
-
-        it = DWIM_SumWalker(2, seq, request_more)
+        walker = sum_walker.iterator_wrapper.Walker(
+            counts=[2], iterator=natural_nums_iter())
 
         def print_next():
-            nonlocal it
-            sum_, coords = next(it)
+            nonlocal walker
+            sum_, coords = next(walker)
             print_("{} = {}".format(
                 sum_, " ; ".join(
-                    [" + ".join([str(seq[x]) for x in permutation])
+                    [" + ".join([str(x.value) for x in permutation])
                      for permutation in coords])))
 
         # Prints «2 = 1 + 1»
@@ -64,10 +64,10 @@ A simple example of printing sums of two integers:
         # Prints «6 = 1 + 5 ; 2 + 4 ; 3 + 3»
         print_next()
 
-
     main()
 
-A more interesting example:
+A more interesting example, this time using the more beaurocratic
+sum_walker module:
 
 ::
 
