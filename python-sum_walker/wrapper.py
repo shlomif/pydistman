@@ -20,6 +20,11 @@ base_dir = "python-" + repo_name
 
 
 def main():
+    build_only()
+    run_test()
+
+
+def build_only():
     if os.path.exists(repo_name):
         shutil.rmtree(repo_name)
     cookiecutter.main.cookiecutter(
@@ -72,7 +77,10 @@ def main():
         "[tox]\nenvlist = py38\n\n" +
         """[testenv]\ndeps =\n\tpytest\n\tpytest-cov\ncommands = pytest\n""")
     os.chmod(testfn, 0o755)
-    check_call(["bash", "-c", "cd sum_walker && tox"])
+
+
+def run_test():
+    check_call(["bash", "-c", myformat("cd {repo_name} && tox")])
 
 
 def myformat(s):
@@ -87,7 +95,7 @@ def gen_travis_yaml():
             'install':
             [
                 'pip install cookiecutter',
-                myformat('( cd {base_dir} && python3 wrapper.py build )'),
+                myformat('( cd {base_dir} && python3 wrapper.py build_only )'),
                 myformat('( cd {base_dir} && cd {repo_name} && ' +
                          'pip install -r requirements.txt && pip install . )')
             ],
@@ -111,5 +119,7 @@ if cmd == 'travis':
     gen_travis_yaml()
 elif cmd == 'build':
     main()
+elif cmd == 'build_only':
+    build_only()
 else:
     raise BaseException("Unknown sub-command")
