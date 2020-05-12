@@ -7,9 +7,17 @@
 # Distributed under terms of the MIT license.
 
 import cookiecutter.main
+import os
+import os.path
+import re
+import shutil
+from subprocess import check_call
 
 
 def main():
+    repo_name = "sum_walker"
+    if os.path.exists(repo_name):
+        shutil.rmtree(repo_name)
     cookiecutter.main.cookiecutter(
         'gh:Kwpolska/python-project-template',
         no_input=True,
@@ -21,7 +29,7 @@ def main():
                 ("Iterate over sums of a certain" +
                  " number of elements"),
             "release_date": "2020-02-25",
-            "repo_name": "sum_walker",
+            "repo_name": repo_name,
             "version": "0.8.2",
             "year": "2020",
             'aur_email': "shlomif@cpan.org",
@@ -41,7 +49,6 @@ def main():
 
     def _re_mutate(fn, pattern, repl_fn, prefix='', suffix=''):
         txt = open(fn, "rt").read()
-        import re
         txt, count = re.subn(pattern, (prefix + open(
             repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
             txt, 1, re.M | re.S)
@@ -60,9 +67,7 @@ def main():
     open("sum_walker/tox.ini", "wt").write(
         "[tox]\nenvlist = py38\n\n" +
         """[testenv]\ndeps =\n\tpytest\n\tpytest-cov\ncommands = pytest\n""")
-    import os
     os.chmod(testfn, 0o755)
-    from subprocess import check_call
     check_call(["bash", "-c", "cd sum_walker && tox"])
 
 

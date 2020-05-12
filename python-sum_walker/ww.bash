@@ -6,6 +6,6 @@
 # Distributed under terms of the MIT license.
 #
 
-rm -fr ~/.cookiecutters/python-project-template/
-rm -fr sum_walker/
+# rm -fr ~/.cookiecutters/python-project-template/
+# rm -fr sum_walker/
 exec python3 wrapper.py "$@"
