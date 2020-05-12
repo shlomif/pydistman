@@ -106,7 +106,7 @@ def gen_travis_yaml():
                     '--cov-report term-missing tests/ )')
             ],
             'language': 'python',
-            'python': ['3.5', '3.6', '3.7', '3.8', 'pypy', ],
+            'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
             }))
 
 
