@@ -11,11 +11,15 @@ import os
 import os.path
 import re
 import shutil
+import sys
 from subprocess import check_call
 
 
+repo_name = "sum_walker"
+base_dir = "python-" + repo_name
+
+
 def main():
-    repo_name = "sum_walker"
     if os.path.exists(repo_name):
         shutil.rmtree(repo_name)
     cookiecutter.main.cookiecutter(
@@ -71,4 +75,41 @@ def main():
     check_call(["bash", "-c", "cd sum_walker && tox"])
 
 
-main()
+def myformat(s):
+    return s.format(base_dir=base_dir, repo_name=repo_name)
+
+
+def gen_travis_yaml():
+    import yaml
+
+    with open("travis.yml", "wt") as f:
+        f.write(yaml.dump({
+            'install':
+            [
+                'pip install cookiecutter',
+                myformat('( cd {base_dir} && python3 wrapper.py build )'),
+                myformat('( cd {base_dir} && cd {repo_name} && ' +
+                         'pip install -r requirements.txt && pip install . )')
+            ],
+            'script': [
+                myformat(
+                    '( cd {base_dir} && cd {repo_name} && ' +
+                    'py.test --cov {repo_name} ' +
+                    '--cov-report term-missing tests/ )')
+            ],
+            'language': 'python',
+            'python': ['3.5', '3.6', '3.7', '3.8', 'pypy', ],
+            }))
+
+
+try:
+    cmd = sys.argv.pop(1)
+except IndexError:
+    cmd = 'build'
+
+if cmd == 'travis':
+    gen_travis_yaml()
+elif cmd == 'build':
+    main()
+else:
+    raise BaseException("Unknown sub-command")

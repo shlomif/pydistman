@@ -1,0 +1,15 @@
+install:
+- pip install cookiecutter
+- ( cd python-sum_walker && python3 wrapper.py build )
+- ( cd python-sum_walker && cd sum_walker && pip install -r requirements.txt && pip
+  install . )
+language: python
+python:
+- '3.5'
+- '3.6'
+- '3.7'
+- '3.8'
+- pypy
+script:
+- ( cd python-sum_walker && cd sum_walker && py.test --cov sum_walker --cov-report
+  term-missing tests/ )
