@@ -116,6 +116,16 @@ class DistGenerator(object):
                 'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
                 }))
 
+    def run_command(self, cmd, args):
+        if cmd == 'travis':
+            obj.command__gen_travis_yaml()
+        elif cmd == 'build':
+            obj.command__build()
+        elif cmd == 'build_only':
+            obj.command__build_only()
+        else:
+            raise BaseException("Unknown sub-command")
+
 
 try:
     cmd = sys.argv.pop(1)
@@ -126,12 +136,4 @@ dist_name = "sum_walker"
 base_dir = "python-" + dist_name
 
 obj = DistGenerator(dist_name=dist_name, base_dir=base_dir)
-
-if cmd == 'travis':
-    obj.command__gen_travis_yaml()
-elif cmd == 'build':
-    obj.command__build()
-elif cmd == 'build_only':
-    obj.command__build_only()
-else:
-    raise BaseException("Unknown sub-command")
+obj.run_command(cmd=cmd, args=[])
