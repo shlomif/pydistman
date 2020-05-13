@@ -19,95 +19,106 @@ repo_name = "sum_walker"
 base_dir = "python-" + repo_name
 
 
-def main():
-    build_only()
-    run_test()
+class DistGenerator(object):
+    """docstring for DistGenerator"""
+    def __init__(self, dist_name, base_dir):
+        self.dist_name = dist_name
+        self.base_dir = base_dir
 
+    def command__build(self):
+        self.command__build_only()
+        self.command__test()
 
-def build_only():
-    if os.path.exists(repo_name):
-        shutil.rmtree(repo_name)
-    cookiecutter.main.cookiecutter(
-        'gh:Kwpolska/python-project-template',
-        no_input=True,
-        overwrite_if_exists=True,
-        extra_context={
-            "entry_point": ["none", "cli", "gui", ],
-            "project_name": "Sum walker",
-            "project_short_description":
-                ("Iterate over sums of a certain" +
-                 " number of elements"),
-            "release_date": "2020-02-25",
-            "repo_name": repo_name,
-            "version": "0.8.2",
-            "year": "2020",
-            'aur_email': "shlomif@cpan.org",
-            'email': "shlomif@cpan.org",
-            'full_name': 'Shlomi Fish',
-            'github_username': "shlomif",
-            },
-        )
+    def command__build_only(self):
+        if os.path.exists(repo_name):
+            shutil.rmtree(repo_name)
+        cookiecutter.main.cookiecutter(
+            'gh:Kwpolska/python-project-template',
+            no_input=True,
+            overwrite_if_exists=True,
+            extra_context={
+                "entry_point": ["none", "cli", "gui", ],
+                "project_name": "Sum walker",
+                "project_short_description":
+                    ("Iterate over sums of a certain" +
+                     " number of elements"),
+                "release_date": "2020-02-25",
+                "repo_name": repo_name,
+                "version": "0.8.2",
+                "year": "2020",
+                'aur_email': "shlomif@cpan.org",
+                'email': "shlomif@cpan.org",
+                'full_name': 'Shlomi Fish',
+                'github_username': "shlomif",
+                },
+            )
 
-    def _append(to, from_):
-        open(to, "at").write(open(from_, "rt").read())
+        def _append(to, from_):
+            open(to, "at").write(open(from_, "rt").read())
 
-    _append("sum_walker/sum_walker/__init__.py", "code/sum_walker/__init__.py")
-    _append("sum_walker/sum_walker/iterator_wrapper.py",
-            "code/sum_walker/iterator_wrapper.py")
-    chglog = "sum_walker/CHANGELOG.rst"
+        _append("sum_walker/sum_walker/__init__.py",
+                "code/sum_walker/__init__.py")
+        _append("sum_walker/sum_walker/iterator_wrapper.py",
+                "code/sum_walker/iterator_wrapper.py")
+        chglog = "sum_walker/CHANGELOG.rst"
 
-    def _re_mutate(fn, pattern, repl_fn, prefix='', suffix=''):
-        txt = open(fn, "rt").read()
-        txt, count = re.subn(pattern, (prefix + open(
-            repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
-            txt, 1, re.M | re.S)
-        # print(count)
-        assert count == 1
-        open(fn, "wt").write(txt)
-    _re_mutate(chglog, "\n0\\.1\\.0\n.*", "code/CHANGELOG.rst.base.txt", "\n")
-    s = "COPYRIGHT\n"
-    for fn in ["sum_walker/README", "sum_walker/README.rst",
-               "sum_walker/docs/README.rst", ]:
-        _re_mutate(fn, "^PURPOSE\n.*?\n" + s, "code/README.part.rst", '', s)
+        def _re_mutate(fn, pattern, repl_fn, prefix='', suffix=''):
+            txt = open(fn, "rt").read()
+            txt, count = re.subn(pattern, (prefix + open(
+                repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
+                txt, 1, re.M | re.S)
+            # print(count)
+            assert count == 1
+            open(fn, "wt").write(txt)
+        _re_mutate(
+            chglog, "\n0\\.1\\.0\n.*",
+            "code/CHANGELOG.rst.base.txt", "\n")
+        s = "COPYRIGHT\n"
+        for fn in ["sum_walker/README", "sum_walker/README.rst",
+                   "sum_walker/docs/README.rst", ]:
+            _re_mutate(
+                fn, "^PURPOSE\n.*?\n" + s, "code/README.part.rst", '', s)
 
-    testfn = "sum_walker/tests/test_sum_walker.py"
-    _append(testfn,
-            "code/tests/test_sum_walker.py")
-    open("sum_walker/tox.ini", "wt").write(
-        "[tox]\nenvlist = py38\n\n" +
-        """[testenv]\ndeps =\n\tpytest\n\tpytest-cov\ncommands = pytest\n""")
-    os.chmod(testfn, 0o755)
+        testfn = "sum_walker/tests/test_sum_walker.py"
+        _append(testfn,
+                "code/tests/test_sum_walker.py")
+        open("sum_walker/tox.ini", "wt").write(
+            "[tox]\nenvlist = py38\n\n" +
+            "[testenv]\ndeps =\n\tpytest\n\t" +
+            "pytest-cov\ncommands = pytest\n")
+        os.chmod(testfn, 0o755)
 
+    def command__test(self):
+        check_call(["bash", "-c", myformat("cd {repo_name} && tox")])
 
-def run_test():
-    check_call(["bash", "-c", myformat("cd {repo_name} && tox")])
+    def command__gen_travis_yaml(self):
+        import yaml
+
+        with open("travis.yml", "wt") as f:
+            f.write(yaml.dump({
+                'install':
+                [
+                    'pip install cookiecutter',
+                    myformat(
+                        '( cd {base_dir} && ' +
+                        'python3 wrapper.py command__build_only )'),
+                    myformat(
+                        '( cd {base_dir} && cd {repo_name} && ' +
+                        'pip install -r requirements.txt && pip install . )')
+                ],
+                'script': [
+                    myformat(
+                        '( cd {base_dir} && cd {repo_name} && ' +
+                        'py.test --cov {repo_name} ' +
+                        '--cov-report term-missing tests/ )')
+                ],
+                'language': 'python',
+                'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
+                }))
 
 
 def myformat(s):
     return s.format(base_dir=base_dir, repo_name=repo_name)
-
-
-def gen_travis_yaml():
-    import yaml
-
-    with open("travis.yml", "wt") as f:
-        f.write(yaml.dump({
-            'install':
-            [
-                'pip install cookiecutter',
-                myformat('( cd {base_dir} && python3 wrapper.py build_only )'),
-                myformat('( cd {base_dir} && cd {repo_name} && ' +
-                         'pip install -r requirements.txt && pip install . )')
-            ],
-            'script': [
-                myformat(
-                    '( cd {base_dir} && cd {repo_name} && ' +
-                    'py.test --cov {repo_name} ' +
-                    '--cov-report term-missing tests/ )')
-            ],
-            'language': 'python',
-            'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
-            }))
 
 
 try:
@@ -115,11 +126,13 @@ try:
 except IndexError:
     cmd = 'build'
 
+obj = DistGenerator(dist_name="sum_walker", base_dir=base_dir)
+
 if cmd == 'travis':
-    gen_travis_yaml()
+    obj.command__gen_travis_yaml()
 elif cmd == 'build':
-    main()
-elif cmd == 'build_only':
-    build_only()
+    obj.command__build()
+elif cmd == 'command__build_only':
+    obj.command__build_only()
 else:
     raise BaseException("Unknown sub-command")
