@@ -15,10 +15,6 @@ import sys
 from subprocess import check_call
 
 
-repo_name = "sum_walker"
-base_dir = "python-" + repo_name
-
-
 class DistGenerator(object):
     """docstring for DistGenerator"""
     def __init__(self, dist_name, base_dir):
@@ -105,7 +101,7 @@ class DistGenerator(object):
                     'pip install cookiecutter',
                     self._myformat(
                         '( cd {base_dir} && ' +
-                        'python3 wrapper.py command__build_only )'),
+                        'python3 wrapper.py build_only )'),
                     self._myformat(
                         '( cd {base_dir} && cd {dist_name} && ' +
                         'pip install -r requirements.txt && pip install . )')
@@ -126,13 +122,16 @@ try:
 except IndexError:
     cmd = 'build'
 
-obj = DistGenerator(dist_name="sum_walker", base_dir=base_dir)
+dist_name = "sum_walker"
+base_dir = "python-" + dist_name
+
+obj = DistGenerator(dist_name=dist_name, base_dir=base_dir)
 
 if cmd == 'travis':
     obj.command__gen_travis_yaml()
 elif cmd == 'build':
     obj.command__build()
-elif cmd == 'command__build_only':
+elif cmd == 'build_only':
     obj.command__build_only()
 else:
     raise BaseException("Unknown sub-command")
