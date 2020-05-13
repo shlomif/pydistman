@@ -25,13 +25,17 @@ class DistGenerator(object):
         self.dist_name = dist_name
         self.base_dir = base_dir
 
+    def _myformat(self, mystring):
+        return mystring.format(
+            dist_name=self.dist_name, base_dir=self.base_dir, )
+
     def command__build(self):
         self.command__build_only()
         self.command__test()
 
     def command__build_only(self):
-        if os.path.exists(repo_name):
-            shutil.rmtree(repo_name)
+        if os.path.exists(self.dist_name):
+            shutil.rmtree(self.dist_name)
         cookiecutter.main.cookiecutter(
             'gh:Kwpolska/python-project-template',
             no_input=True,
@@ -43,7 +47,7 @@ class DistGenerator(object):
                     ("Iterate over sums of a certain" +
                      " number of elements"),
                 "release_date": "2020-02-25",
-                "repo_name": repo_name,
+                "repo_name": self.dist_name,
                 "version": "0.8.2",
                 "year": "2020",
                 'aur_email': "shlomif@cpan.org",
@@ -89,7 +93,7 @@ class DistGenerator(object):
         os.chmod(testfn, 0o755)
 
     def command__test(self):
-        check_call(["bash", "-c", myformat("cd {repo_name} && tox")])
+        check_call(["bash", "-c", self._myformat("cd {dist_name} && tox")])
 
     def command__gen_travis_yaml(self):
         import yaml
@@ -99,26 +103,22 @@ class DistGenerator(object):
                 'install':
                 [
                     'pip install cookiecutter',
-                    myformat(
+                    self._myformat(
                         '( cd {base_dir} && ' +
                         'python3 wrapper.py command__build_only )'),
-                    myformat(
-                        '( cd {base_dir} && cd {repo_name} && ' +
+                    self._myformat(
+                        '( cd {base_dir} && cd {dist_name} && ' +
                         'pip install -r requirements.txt && pip install . )')
                 ],
                 'script': [
-                    myformat(
-                        '( cd {base_dir} && cd {repo_name} && ' +
-                        'py.test --cov {repo_name} ' +
+                    self._myformat(
+                        '( cd {base_dir} && cd {dist_name} && ' +
+                        'py.test --cov {dist_name} ' +
                         '--cov-report term-missing tests/ )')
                 ],
                 'language': 'python',
                 'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
                 }))
-
-
-def myformat(s):
-    return s.format(base_dir=base_dir, repo_name=repo_name)
 
 
 try:
