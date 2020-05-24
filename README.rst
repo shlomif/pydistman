@@ -15,8 +15,14 @@ PURPOSE
 -------
 
 The sum_walker PyPI distribution allows one to iterate over increasing
-sums of a certain number (e.g: 2 or 3) of elements out of a stream of
+sums of a certain count (e.g: 2 or 3) of elements out of a stream of
 increasing integers.
+
+This repository also serves as a test bed for an experimental distribution
+generator for python, inspired by Perl 5's `Dist::Zilla <http://dzil.org/>`
+, which is “Maximum Overkill” and "don't repeat yourself". Currently,
+there is still a lot of way for this vision to materialise, but you can
+see the work-in-progress at `wrapper.py <./python-sum_walker/wrapper.py>` .
 
 INSTALLATION
 ------------
