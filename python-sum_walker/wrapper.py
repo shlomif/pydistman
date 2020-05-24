@@ -20,12 +20,16 @@ class DistGenerator(object):
     def __init__(self, dist_name, base_dir):
         self.dist_name = dist_name
         self.base_dir = base_dir
+        self.src_dir = "code"
         self.dest_modules_dir = dist_name + "/" + dist_name
 
     def _myformat(self, mystring):
         return mystring.format(
-            dist_name=self.dist_name, base_dir=self.base_dir,
-            dest_modules_dir=self.dest_modules_dir)
+            base_dir=self.base_dir,
+            dest_modules_dir=self.dest_modules_dir,
+            dist_name=self.dist_name,
+            src_dir=self.src_dir,
+        )
 
     def command__build(self):
         self.command__build_only()
@@ -60,13 +64,14 @@ class DistGenerator(object):
                 open(self._myformat(from_), "rt").read())
 
         _append("{dest_modules_dir}/__init__.py",
-                "code/sum_walker/__init__.py")
+                "{src_dir}/sum_walker/__init__.py")
         _append("{dest_modules_dir}/iterator_wrapper.py",
-                "code/sum_walker/iterator_wrapper.py")
+                "{src_dir}/sum_walker/iterator_wrapper.py")
         chglog = "sum_walker/CHANGELOG.rst"
 
-        def _re_mutate(fn_proto, pattern, repl_fn, prefix='', suffix=''):
+        def _re_mutate(fn_proto, pattern, repl_fn_proto, prefix='', suffix=''):
             fn = self._myformat(fn_proto)
+            repl_fn = self._myformat(repl_fn_proto)
             txt = open(fn, "rt").read()
             txt, count = re.subn(pattern, (prefix + open(
                 repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
@@ -76,16 +81,16 @@ class DistGenerator(object):
             open(fn, "wt").write(txt)
         _re_mutate(
             chglog, "\n0\\.1\\.0\n.*",
-            "code/CHANGELOG.rst.base.txt", "\n")
+            "{src_dir}/CHANGELOG.rst.base.txt", "\n")
         s = "COPYRIGHT\n"
         for fn in ["{dist_name}/README", "{dist_name}/README.rst",
                    "{dist_name}/docs/README.rst", ]:
             _re_mutate(
-                fn, "^PURPOSE\n.*?\n" + s, "code/README.part.rst", '', s)
+                fn, "^PURPOSE\n.*?\n" + s, "{src_dir}/README.part.rst", '', s)
 
         testfn = self._myformat("{dist_name}/tests/test_sum_walker.py")
         _append(testfn,
-                "code/tests/test_sum_walker.py")
+                "{src_dir}/tests/test_sum_walker.py")
         open("sum_walker/tox.ini", "wt").write(
             "[tox]\nenvlist = py38\n\n" +
             "[testenv]\ndeps =\n\tpytest\n\t" +
