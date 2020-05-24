@@ -21,6 +21,7 @@ class DistGenerator(object):
         self.dist_name = dist_name
         self.base_dir = base_dir
         self.src_dir = "code"
+        self.src_modules_dir = self.src_dir + "/" + dist_name
         self.dest_modules_dir = dist_name + "/" + dist_name
 
     def _myformat(self, mystring):
@@ -29,6 +30,7 @@ class DistGenerator(object):
             dest_modules_dir=self.dest_modules_dir,
             dist_name=self.dist_name,
             src_dir=self.src_dir,
+            src_modules_dir=self.src_modules_dir,
         )
 
     def command__build(self):
@@ -64,9 +66,9 @@ class DistGenerator(object):
                 open(self._myformat(from_), "rt").read())
 
         _append("{dest_modules_dir}/__init__.py",
-                "{src_dir}/sum_walker/__init__.py")
+                "{src_modules_dir}/__init__.py")
         _append("{dest_modules_dir}/iterator_wrapper.py",
-                "{src_dir}/sum_walker/iterator_wrapper.py")
+                "{src_modules_dir}/iterator_wrapper.py")
         chglog = "sum_walker/CHANGELOG.rst"
 
         def _re_mutate(fn_proto, pattern, repl_fn_proto, prefix='', suffix=''):
