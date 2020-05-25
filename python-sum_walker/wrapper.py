@@ -24,6 +24,12 @@ class DistGenerator(object):
         self.src_modules_dir = self.src_dir + "/" + dist_name
         self.dest_modules_dir = dist_name + "/" + dist_name
 
+    def _slurp(self, fn):
+        return open(fn, "rt").read()
+
+    def _fmt_slurp(self, fn_proto):
+        return self._slurp(self._myformat(fn_proto))
+
     def _myformat(self, mystring):
         return mystring.format(
             base_dir=self.base_dir,
@@ -64,7 +70,7 @@ class DistGenerator(object):
         def _append(to_proto, from_, make_exe=False):
             to = self._myformat(to_proto)
             open(to, "at").write(
-                open(self._myformat(from_), "rt").read())
+                self._fmt_slurp(from_))
             if make_exe:
                 os.chmod(to, 0o755)
 
@@ -76,11 +82,18 @@ class DistGenerator(object):
 
         def _re_mutate(fn_proto, pattern, repl_fn_proto, prefix='', suffix=''):
             fn = self._myformat(fn_proto)
-            repl_fn = self._myformat(repl_fn_proto)
-            txt = open(fn, "rt").read()
-            txt, count = re.subn(pattern, (prefix + open(
-                repl_fn, "rt").read() + suffix).replace('\\', '\\\\'),
-                txt, 1, re.M | re.S)
+            replacement_string = \
+                (prefix +
+                 self._fmt_slurp(repl_fn_proto) +
+                 suffix)
+            txt = self._slurp(fn)
+            txt, count = re.subn(
+                pattern,
+                replacement_string.replace('\\', '\\\\'),
+                txt,
+                1,
+                re.M | re.S
+            )
             # print(count)
             assert count == 1
             open(fn, "wt").write(txt)
