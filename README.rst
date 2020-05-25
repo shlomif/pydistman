@@ -19,10 +19,10 @@ sums of a certain count (e.g: 2 or 3) of elements out of a stream of
 increasing integers.
 
 This repository also serves as a test bed for an experimental distribution
-generator for python, inspired by Perl 5's `Dist::Zilla <http://dzil.org/>`
+generator for python, inspired by Perl 5's `Dist::Zilla <http://dzil.org/>`_
 , which is “Maximum Overkill” and "don't repeat yourself". Currently,
 there is still a lot of way for this vision to materialise, but you can
-see the work-in-progress at `wrapper.py <./python-sum_walker/wrapper.py>` .
+see the work-in-progress at `wrapper.py <./python-sum_walker/wrapper.py>`_ .
 
 INSTALLATION
 ------------
@@ -31,6 +31,62 @@ pip3 install sum_walker
 
 USAGE
 -----
+
+A simple example of printing sums of two integers:
+
+::
+
+    #! /usr/bin/env python3
+    # -*- coding: utf-8 -*-
+    # vim:fenc=utf-8
+    #
+    # Copyright © 2020 Shlomi Fish <shlomif@cpan.org>
+    #
+    # Distributed under the terms of the MIT license.
+    #
+    # This program displays increasing sums of two positive integers
+
+    from six import print_
+    import sum_walker.iterator_wrapper
+
+
+    def main():
+        def natural_nums_iter():
+            ret = 1
+            while True:
+                yield ret
+                ret += 1
+
+        walker = sum_walker.iterator_wrapper.Walker(
+            counts=[2], iterator=natural_nums_iter())
+
+        def print_next():
+            nonlocal walker
+            sum_, coords = next(walker)
+            print_("{} = {}".format(
+                sum_, " ; ".join(
+                    [" + ".join([str(x.value) for x in permutation])
+                     for permutation in coords])))
+
+        # Prints «2 = 1 + 1»
+        print_next()
+
+        # Prints «3 = 1 + 2»
+        print_next()
+
+        # Prints «4 = 1 + 3 ; 2 + 2»
+        print_next()
+
+        # Prints «5 = 1 + 4 ; 2 + 3»
+        print_next()
+
+        # Prints «6 = 1 + 5 ; 2 + 4 ; 3 + 3»
+        print_next()
+
+    main()
+
+A more interesting example, this time using the more beaurocratic
+sum_walker module:
 
 ::
 
@@ -53,7 +109,7 @@ USAGE
     for sum_, coords in it:
         len_ = len(coords)
         if len_ > 1:
-            print("{}	{}	{}".format(
+            print("{}\t{}\t{}".format(
                 len_, sum_, " ; ".join(
                     [" + ".join(["{} ** 3".format(x) for x in c])
                      for c in coords])))
