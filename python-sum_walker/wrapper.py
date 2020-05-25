@@ -78,7 +78,6 @@ class DistGenerator(object):
                 "{src_modules_dir}/__init__.py")
         _append("{dest_modules_dir}/iterator_wrapper.py",
                 "{src_modules_dir}/iterator_wrapper.py")
-        chglog = "sum_walker/CHANGELOG.rst"
 
         def _re_mutate(fn_proto, pattern, repl_fn_proto, prefix='', suffix=''):
             fn = self._myformat(fn_proto)
@@ -98,7 +97,8 @@ class DistGenerator(object):
             assert count == 1
             open(fn, "wt").write(txt)
         _re_mutate(
-            chglog, "\n0\\.1\\.0\n.*",
+            "{dist_name}/CHANGELOG.rst",
+            "\n0\\.1\\.0\n.*",
             "{src_dir}/CHANGELOG.rst.base.txt", "\n")
         s = "COPYRIGHT\n"
         for fn in ["{dist_name}/README", "{dist_name}/README.rst",
@@ -109,7 +109,7 @@ class DistGenerator(object):
         _append("{dist_name}/tests/test_sum_walker.py",
                 "{src_dir}/tests/test_sum_walker.py",
                 make_exe=True)
-        open("sum_walker/tox.ini", "wt").write(
+        open(self._myformat("{dist_name}/tox.ini"), "wt").write(
             "[tox]\nenvlist = py38\n\n" +
             "[testenv]\ndeps =\n\tpytest\n\t" +
             "pytest-cov\ncommands = pytest\n")
