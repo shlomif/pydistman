@@ -61,9 +61,12 @@ class DistGenerator(object):
                 },
             )
 
-        def _append(to, from_):
-            open(self._myformat(to), "at").write(
+        def _append(to_proto, from_, make_exe=False):
+            to = self._myformat(to_proto)
+            open(to, "at").write(
                 open(self._myformat(from_), "rt").read())
+            if make_exe:
+                os.chmod(to, 0o755)
 
         _append("{dest_modules_dir}/__init__.py",
                 "{src_modules_dir}/__init__.py")
@@ -90,14 +93,13 @@ class DistGenerator(object):
             _re_mutate(
                 fn, "^PURPOSE\n.*?\n" + s, "{src_dir}/README.part.rst", '', s)
 
-        testfn = self._myformat("{dist_name}/tests/test_sum_walker.py")
-        _append(testfn,
-                "{src_dir}/tests/test_sum_walker.py")
+        _append("{dist_name}/tests/test_sum_walker.py",
+                "{src_dir}/tests/test_sum_walker.py",
+                make_exe=True)
         open("sum_walker/tox.ini", "wt").write(
             "[tox]\nenvlist = py38\n\n" +
             "[testenv]\ndeps =\n\tpytest\n\t" +
             "pytest-cov\ncommands = pytest\n")
-        os.chmod(testfn, 0o755)
 
     def command__test(self):
         check_call(["bash", "-c", self._myformat("cd {dist_name} && tox")])
