@@ -86,6 +86,13 @@ class DistGenerator(object):
             if make_exe:
                 os.chmod(to, 0o755)
 
+        def _dest_append(bn_proto, make_exe=False):
+            return _append(
+                "{dest_dir}/"+bn_proto,
+                "{src_dir}/"+bn_proto,
+                make_exe
+            )
+
         _append("{dest_modules_dir}/__init__.py",
                 "{src_modules_dir}/__init__.py")
         _append("{dest_modules_dir}/iterator_wrapper.py",
@@ -118,11 +125,10 @@ class DistGenerator(object):
             _re_mutate(
                 fn, "^PURPOSE\n.*?\n" + s, "{src_dir}/README.part.rst", '', s)
 
-        req_fn = "{src_dir}/requirements.txt"
-        _append("{dest_dir}/requirements.txt",
-                req_fn)
-        _append("{dest_dir}/tests/test_sum_walker.py",
-                "{src_dir}/tests/test_sum_walker.py",
+        req_bn = "requirements.txt"
+        req_fn = "{src_dir}/" + req_bn
+        _dest_append(req_bn)
+        _dest_append("tests/test_sum_walker.py",
                 make_exe=True)
         open(self._myformat("{dest_dir}/tox.ini"), "wt").write(
             "[tox]\nenvlist = py38\n\n" +
