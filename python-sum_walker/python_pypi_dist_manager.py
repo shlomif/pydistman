@@ -6,13 +6,15 @@
 #
 # Distributed under terms of the MIT license.
 
-import cookiecutter.main
 import os
 import os.path
+import platform
 import re
 import shutil
 import sys
 from subprocess import check_call
+
+import cookiecutter.main
 
 
 class DistGenerator(object):
@@ -22,7 +24,12 @@ class DistGenerator(object):
         self.base_dir = base_dir
         self.src_dir = "code"
         self.src_modules_dir = self.src_dir + "/" + dist_name
-        self.dest_modules_dir = dist_name + "/" + dist_name
+        self.dest_dir = 'dest'
+        self.dest_modules_dir = self.dest_dir + "/" + dist_name
+        system = platform.system().lower()
+        self.tox_cmd = (
+            "py -3.8 -m tox"
+            if (('windows' in system) or ('cygwin' in system)) else 'tox')
 
     def _slurp(self, fn):
         return open(fn, "rt").read()
@@ -33,10 +40,12 @@ class DistGenerator(object):
     def _myformat(self, mystring):
         return mystring.format(
             base_dir=self.base_dir,
+            dest_dir=self.dest_dir,
             dest_modules_dir=self.dest_modules_dir,
             dist_name=self.dist_name,
             src_dir=self.src_dir,
             src_modules_dir=self.src_modules_dir,
+            tox_cmd=self.tox_cmd
         )
 
     def command__build(self):
@@ -44,6 +53,8 @@ class DistGenerator(object):
         self.command__test()
 
     def command__build_only(self):
+        if os.path.exists(self.dest_dir):
+            shutil.rmtree(self.dest_dir)
         if os.path.exists(self.dist_name):
             shutil.rmtree(self.dist_name)
         cookiecutter.main.cookiecutter(
@@ -66,6 +77,7 @@ class DistGenerator(object):
                 'github_username': "shlomif",
                 },
             )
+        os.rename(self.dist_name, self.dest_dir)
 
         def _append(to_proto, from_, make_exe=False):
             to = self._myformat(to_proto)
@@ -97,25 +109,37 @@ class DistGenerator(object):
             assert count == 1
             open(fn, "wt").write(txt)
         _re_mutate(
-            "{dist_name}/CHANGELOG.rst",
+            "{dest_dir}/CHANGELOG.rst",
             "\n0\\.1\\.0\n.*",
             "{src_dir}/CHANGELOG.rst.base.txt", "\n")
         s = "COPYRIGHT\n"
-        for fn in ["{dist_name}/README", "{dist_name}/README.rst",
-                   "{dist_name}/docs/README.rst", ]:
+        for fn in ["{dest_dir}/README", "{dest_dir}/README.rst",
+                   "{dest_dir}/docs/README.rst", ]:
             _re_mutate(
                 fn, "^PURPOSE\n.*?\n" + s, "{src_dir}/README.part.rst", '', s)
 
-        _append("{dist_name}/tests/test_sum_walker.py",
+        req_fn = "{src_dir}/requirements.txt"
+        _append("{dest_dir}/requirements.txt",
+                req_fn)
+        _append("{dest_dir}/tests/test_sum_walker.py",
                 "{src_dir}/tests/test_sum_walker.py",
                 make_exe=True)
-        open(self._myformat("{dist_name}/tox.ini"), "wt").write(
+        open(self._myformat("{dest_dir}/tox.ini"), "wt").write(
             "[tox]\nenvlist = py38\n\n" +
-            "[testenv]\ndeps =\n\tpytest\n\t" +
-            "pytest-cov\ncommands = pytest\n")
+            "[testenv]\ndeps =" + "".join(
+                ["\n\t" + x for x in
+                 self._fmt_slurp(req_fn).split("\n")]) + "\n" +
+            "\ncommands = pytest\n")
 
     def command__test(self):
-        check_call(["bash", "-c", self._myformat("cd {dist_name} && tox")])
+        check_call(["bash", "-c",
+                    self._myformat("cd {dest_dir} && {tox_cmd}")])
+
+    def command__release(self):
+        self.command__build()
+        check_call(["bash", "-c", self._myformat(
+            "cd {dest_dir} && python3 setup.py sdist " +
+            " && twine upload --verbose dist/{dist_name}*.tar.gz")])
 
     def command__gen_travis_yaml(self):
         import yaml
@@ -127,14 +151,14 @@ class DistGenerator(object):
                     'pip install cookiecutter',
                     self._myformat(
                         '( cd {base_dir} && ' +
-                        'python3 wrapper.py build_only )'),
+                        'python3 python_pypi_dist_manager.py build_only )'),
                     self._myformat(
-                        '( cd {base_dir} && cd {dist_name} && ' +
+                        '( cd {base_dir} && cd {dest_dir} && ' +
                         'pip install -r requirements.txt && pip install . )')
                 ],
                 'script': [
                     self._myformat(
-                        '( cd {base_dir} && cd {dist_name} && ' +
+                        '( cd {base_dir} && cd {dest_dir} && ' +
                         'py.test --cov {dist_name} ' +
                         '--cov-report term-missing tests/ )')
                 ],
@@ -149,6 +173,10 @@ class DistGenerator(object):
             obj.command__build()
         elif cmd == 'build_only':
             obj.command__build_only()
+        elif cmd == 'release':
+            obj.command__release()
+        elif cmd == 'test':
+            obj.command__build()
         else:
             raise BaseException("Unknown sub-command")
 
