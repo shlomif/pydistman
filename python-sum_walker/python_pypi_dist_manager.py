@@ -154,6 +154,7 @@ class DistGenerator(object):
             f.write(yaml.dump({
                 'install':
                 [
+                    'pip install -U pip',
                     'pip install cookiecutter',
                     self._myformat(
                         '( cd {base_dir} && ' +
