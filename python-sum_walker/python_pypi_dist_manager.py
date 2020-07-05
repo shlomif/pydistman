@@ -32,7 +32,9 @@ class DistGenerator(object):
             if (('windows' in system) or ('cygwin' in system)) else 'tox')
 
     def _slurp(self, fn):
-        return open(fn, "rt").read()
+        with open(fn, "rt") as ifh:
+            ret = ifh.read()
+        return ret
 
     def _fmt_slurp(self, fn_proto):
         return self._slurp(self._myformat(fn_proto))
@@ -81,8 +83,8 @@ class DistGenerator(object):
 
         def _append(to_proto, from_, make_exe=False):
             to = self._myformat(to_proto)
-            open(to, "at").write(
-                self._fmt_slurp(from_))
+            with open(to, "at") as ofh:
+                ofh.write(self._fmt_slurp(from_))
             if make_exe:
                 os.chmod(to, 0o755)
 
@@ -112,9 +114,9 @@ class DistGenerator(object):
                 1,
                 re.M | re.S
             )
-            # print(count)
             assert count == 1
-            open(fn, "wt").write(txt)
+            with open(fn, "wt") as ofh:
+                ofh.write(txt)
         _re_mutate(
             "{dest_dir}/CHANGELOG.rst",
             "\n0\\.1\\.0\n.*",
@@ -152,12 +154,13 @@ class DistGenerator(object):
                     else:
                         raise BaseException("mismatch reqs: {} {} {}".format(req, ver, d[req]))
             txt = "".join(sorted([x + ('' if v=='0' else '>='+v) + "\n" for x, v in d.items()]))
-            open(fn, "wt").write(txt)
+            with open(fn, "wt") as ofh:
+                ofh.write(txt)
         _reqs_mutate(dest_req_fn)
         _dest_append("tests/test_sum_walker.py",
                 make_exe=True)
-        open(self._myformat("{dest_dir}/tox.ini"), "wt").write(
-            "[tox]\nenvlist = py38\n\n" +
+        with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
+            ofh.write("[tox]\nenvlist = py38\n\n" +
             "[testenv]\ndeps =" + "".join(
                 ["\n\t" + x for x in
                  self._fmt_slurp(req_fn).split("\n")]) + "\n" +
