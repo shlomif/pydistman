@@ -127,7 +127,33 @@ class DistGenerator(object):
 
         req_bn = "requirements.txt"
         req_fn = "{src_dir}/" + req_bn
+        dest_req_fn = "{dest_dir}/" + req_bn
         _dest_append(req_bn)
+        def _reqs_mutate(fn_proto):
+            fn = self._myformat(fn_proto)
+            txt = self._slurp(fn)
+            d = {}
+            for line in txt.split("\n"):
+                if 0 == len(line):
+                    continue
+                m = re.match("\\A([A-Za-z0-9_\\-]+)>=([0-9\.]+)\\Z", line)
+                if m:
+                    req = m.group(1)
+                    ver = m.group(2)
+                else:
+                    req = line
+                    ver = '0'
+                if ver == '0':
+                    if req not in d:
+                        d[req] = '0'
+                else:
+                    if req not in d or d[req] == '0':
+                        d[req] = ver
+                    else:
+                        raise BaseException("mismatch reqs: {} {} {}".format(req, ver, d[req]))
+            txt = "".join(sorted([x + ('' if v=='0' else '>='+v) + "\n" for x, v in d.items()]))
+            open(fn, "wt").write(txt)
+        _reqs_mutate(dest_req_fn)
         _dest_append("tests/test_sum_walker.py",
                 make_exe=True)
         open(self._myformat("{dest_dir}/tox.ini"), "wt").write(
