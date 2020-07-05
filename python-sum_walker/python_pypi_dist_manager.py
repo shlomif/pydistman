@@ -187,6 +187,9 @@ class DistGenerator(object):
                         '( cd {base_dir} && ' +
                         'python3 python_pypi_dist_manager.py build_only )'),
                     self._myformat(
+                        '( cd {base_dir} && ' +
+                        'cat {dest_dir}/requirements.txt )'),
+                    self._myformat(
                         '( cd {base_dir} && cd {dest_dir} && ' +
                         'pip install -r requirements.txt && pip install . )')
                 ],

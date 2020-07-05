@@ -3,6 +3,7 @@ install:
 - pip install cookiecutter
 - pip --version
 - ( cd python-sum_walker && python3 python_pypi_dist_manager.py build_only )
+- ( cd python-sum_walker && cat dest/requirements.txt )
 - ( cd python-sum_walker && cd dest && pip install -r requirements.txt && pip install
   . )
 language: python
