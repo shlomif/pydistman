@@ -156,6 +156,7 @@ class DistGenerator(object):
                 [
                     'pip install -U pip',
                     'pip install cookiecutter',
+                    'pip --version',
                     self._myformat(
                         '( cd {base_dir} && ' +
                         'python3 python_pypi_dist_manager.py build_only )'),
