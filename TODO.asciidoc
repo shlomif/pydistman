@@ -1,0 +1,24 @@
+python_pypi_dist_manager.py's To-do list
+========================================
+Shlomi Fish <shlomif@cpan.org>
+:Date: 2020-07-15
+:Revision: $Id$
+
+[id="pressing"]
+Pressing
+--------
+
+[id="non_pressing"]
+Non-pressing
+------------
+
+* Traverse the source directory tree for input +*.py+ files and copy/append
+them all.
+
+* Create an class to abstract source→dest path operations.
+
+* Extract a base module for the dist_manager and bootstrap it.
+
+[id="to_be_considered"]
+To be considered
+----------------
