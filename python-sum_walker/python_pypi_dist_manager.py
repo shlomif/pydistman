@@ -23,6 +23,7 @@ class DistGenerator(object):
     dist_name = attr.ib()
     dist_version = attr.ib()
     project_name = attr.ib()
+    project_short_description = attr.ib()
 
     """docstring for DistGenerator"""
     def __attrs_post_init__(self):
@@ -110,9 +111,7 @@ class DistGenerator(object):
             extra_context={
                 "entry_point": ["none", "cli", "gui", ],
                 "project_name": self.project_name,
-                "project_short_description":
-                    ("Iterate over sums of a certain" +
-                     " number of elements"),
+                "project_short_description": self.project_short_description,
                 "release_date": "2020-02-25",
                 "repo_name": self.dist_name,
                 "version": self.dist_version,
@@ -263,5 +262,9 @@ obj = DistGenerator(
     dist_name=dist_name,
     dist_version="0.8.2",
     project_name="Sum Walker",
+    project_short_description=(
+        "Iterate over sums of a certain" +
+        " number of elements"
+    ),
 )
 obj.run_command(cmd=cmd, args=[])
