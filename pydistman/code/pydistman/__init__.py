@@ -150,7 +150,7 @@ class DistManager(object):
 
     def command__build_only(self):
         self._fmt_rmtree("{dest_dir}")
-        self._fmt_rmtree("{dist_name}")
+        # self._fmt_rmtree("{dist_name}")
         cookiecutter.main.cookiecutter(
             'gh:Kwpolska/python-project-template',
             no_input=True,

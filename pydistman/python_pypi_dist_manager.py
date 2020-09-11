@@ -7,25 +7,25 @@
 # Distributed under terms of the MIT license.
 
 import sys
+sys.path.append("./code")
 
-from pydistman import DistManager
+from pydistman import DistManager  # noqa: E402
 
 try:
     cmd = sys.argv.pop(1)
 except IndexError:
     cmd = 'build'
 
-dist_name = "sum_walker"
+dist_name = "pydistman"
 
 obj = DistManager(
     dist_name=dist_name,
-    dist_version="0.8.2",
-    project_name="Sum Walker",
+    dist_version="0.0.1",
+    project_name="Python Dist Manager",
     project_short_description=(
-        "Iterate over sums of a certain" +
-        " number of elements"
+        "\"Maximum Overkill DRY\" PyPI distribution manager (WiP)"
     ),
-    release_date="2020-02-25",
+    release_date="2020-09-11",
     project_year="2020",
     aur_email="shlomif@cpan.org",
     project_email="shlomif@cpan.org",
