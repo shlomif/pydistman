@@ -1,3 +1,6 @@
+0.0.2
+    Fix the handling of the full_name cookiecutter template argument.
+
 0.0.1
     Initial release as extracted from the black-hole-solver, sum walker,
     and rebookmaker sources.

@@ -7,7 +7,7 @@
 # Distributed under terms of the MIT license.
 
 import sys
-sys.path.append("./code")
+sys.path.insert(0, "./code")
 
 from pydistman import DistManager  # noqa: E402
 

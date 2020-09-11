@@ -165,7 +165,7 @@ class DistManager(object):
                 "year": self.project_year,
                 "aur_email": self.aur_email,
                 "email": self.project_email,
-                "name": self.full_name,
+                "full_name": self.full_name,
                 "github_username": self.github_username,
                 },
             )
