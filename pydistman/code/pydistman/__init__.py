@@ -44,7 +44,7 @@ class DistManager(object):
         self.dest_modules_dir = self.dest_dir + "/" + dist_name
         system = platform.system().lower()
         self.tox_cmd = (
-            "py -3.8 -m tox"
+            "py -3.9 -m tox"
             if (('windows' in system) or ('cygwin' in system)) else 'tox')
 
     def _slurp(self, fn):
@@ -201,7 +201,7 @@ class DistManager(object):
             self._dest_append(fn, make_exe=True)
         with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
             ofh.write(
-                "[tox]\nenvlist = py38\n\n" +
+                "[tox]\nenvlist = py39\n\n" +
                 "[testenv]\ndeps =" + "".join(
                     ["\n\t" + x for x in
                      self._fmt_slurp(req_fn).split("\n")]) + "\n" +
@@ -255,7 +255,7 @@ class DistManager(object):
                         '--cov-report term-missing tests/ )')
                 ],
                 'language': 'python',
-                'python': ['3.5', '3.6', '3.7', '3.8', 'pypy3', ],
+                'python': ['3.5', '3.6', '3.7', '3.8', '3.9', 'pypy3', ],
                 }))
 
     def run_command(self, cmd, args):
