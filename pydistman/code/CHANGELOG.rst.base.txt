@@ -1,3 +1,6 @@
+0.0.3
+    Python v3.8 -> v3.9
+
 0.0.2
     Fix the handling of the full_name cookiecutter template argument.
 
