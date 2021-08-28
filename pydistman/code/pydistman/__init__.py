@@ -18,6 +18,7 @@ import shutil
 from subprocess import check_call
 
 import attr
+
 import cookiecutter.main
 
 
@@ -142,9 +143,9 @@ class DistManager(object):
                 else:
                     raise BaseException(
                         "mismatch reqs: {} {} {}".format(req, ver, d[req]))
-        txt = "".join(sorted([
-            x + ('' if v == '0' else '>='+v) + "\n"
-            for x, v in d.items()]))
+        self._reqs = list(sorted([
+            x + ('' if v == '0' else '>='+v) for x, v in d.items()]))
+        txt = "".join([x+"\n" for x in self._reqs])
         with open(fn, "wt") as ofh:
             ofh.write(txt)
 
@@ -196,6 +197,13 @@ class DistManager(object):
         self._dest_append(req_bn)
 
         self._reqs_mutate(dest_req_fn)
+        self._re_mutate(
+            fn_proto="{dest_dir}/setup.py",
+            pattern=("\\binstall_requires\\s*=\\[\\s*\\]"),
+            # repl_fn_proto="{dest_dir}/setup.py",
+            prefix=('install_requires=[' + ",".join([
+                "'"+x+"'" for x in self._reqs]) + ']'),
+        )
 
         for fn in self._src_glob("tests/test*.py"):
             self._dest_append(fn, make_exe=True)
