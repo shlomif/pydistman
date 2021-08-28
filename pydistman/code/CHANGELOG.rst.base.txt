@@ -1,3 +1,6 @@
+0.0.5
+    Add missing attrs dependency to install_requires.
+
 0.0.4
     Add missing attrs dependency to requirements.txt
 

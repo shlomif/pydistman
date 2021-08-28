@@ -20,7 +20,7 @@ dist_name = "pydistman"
 
 obj = DistManager(
     dist_name=dist_name,
-    dist_version="0.0.4",
+    dist_version="0.0.5",
     project_name="Python Dist Manager",
     project_short_description=(
         "\"Maximum Overkill DRY\" PyPI distribution manager (WiP)"
