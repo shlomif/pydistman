@@ -2,9 +2,9 @@ install:
 - pip install -U pip
 - pip install cookiecutter
 - pip --version
-- ( cd python-sum_walker && python3 python_pypi_dist_manager.py build_only )
-- ( cd python-sum_walker && cat dest/requirements.txt )
-- ( cd python-sum_walker && cd dest && pip install -r requirements.txt && pip install
+- ( cd pydistman && python3 python_pypi_dist_manager.py build_only )
+- ( cd pydistman && cat dest/requirements.txt )
+- ( cd pydistman && cd dest && pip install -r requirements.txt && pip install
   . )
 language: python
 python:
@@ -14,5 +14,4 @@ python:
 - '3.8'
 - pypy3
 script:
-- ( cd python-sum_walker && cd dest && py.test --cov sum_walker --cov-report term-missing
-  tests/ )
+- ( cd pydistman && cd dest && py.test --cov sum_walker --cov-report term-missing tests/ )
