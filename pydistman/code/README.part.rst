@@ -1,10 +1,11 @@
 PURPOSE
 -------
 
-A work-in-progress manager to PyPI-like python distribution which aims to
+A work-in-progress manager for PyPI-like python distributions which aims to
 be a "maximum overkill" don't-repeat yourself manager with a user
 experience similar to Dist Zilla ( http://dzil.org/ ).
 
+Currently it is functional, but a far cry from our vision.
 
 INSTALLATION
 ------------
