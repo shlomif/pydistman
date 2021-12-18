@@ -34,6 +34,7 @@ class DistManager(object):
     project_email = attr.ib()
     full_name = attr.ib()
     github_username = attr.ib()
+    filter_test_reqs = attr.ib(default=False)
 
     """docstring for DistManager"""
     def __attrs_post_init__(self):
@@ -120,7 +121,44 @@ class DistManager(object):
             assert fn.startswith(prefix)
             yield fn[prefix_len:]
 
+    def _filtered_reqs_mutate(self, fn_proto):
+        fn = self._myformat(fn_proto)
+        txt = self._slurp(fn)
+        d = {}
+        testreqs = {}
+        for line in txt.split("\n"):
+            if 0 == len(line):
+                continue
+            m = re.match("\\A([A-Za-z0-9_\\-]+)>=([0-9\\.]+)\\Z", line)
+            if m:
+                req = m.group(1)
+                ver = m.group(2)
+            else:
+                req = line
+                ver = '0'
+            if req in ['coverage', 'pytest', 'pytest-cov', 'requests',
+                       'twine', ]:
+                testreqs[req] = '0'
+                continue
+            if ver == '0':
+                if req not in d:
+                    d[req] = '0'
+            else:
+                if req not in d or d[req] == '0':
+                    d[req] = ver
+                else:
+                    raise BaseException(
+                        "mismatch reqs: {} {} {}".format(req, ver, d[req]))
+        self._testreqs = testreqs
+        self._reqs = list(sorted([
+            x + ('' if v == '0' else '>=' + v) for x, v in d.items()]))
+        txt = "".join([x + "\n" for x in self._reqs])
+        with open(fn, "wt") as ofh:
+            ofh.write(txt)
+
     def _reqs_mutate(self, fn_proto):
+        if self.filter_test_reqs:
+            return self._filtered_reqs_mutate(fn_proto)
         fn = self._myformat(fn_proto)
         txt = self._slurp(fn)
         d = {}
@@ -214,7 +252,24 @@ class DistManager(object):
                     ["\n\t" + x for x in
                      self._fmt_slurp(req_fn).split("\n")]) + "\n" +
                 "\ncommands = pytest\n")
+        if self.filter_test_reqs:
+            self._build_only_command_filter_test_steps()
         self._build_only_command_custom_steps()
+
+    def _build_only_command_filter_test_steps(self):
+        req_bn = "requirements.txt"
+        req_fn = "{src_dir}/" + req_bn
+        with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
+            ofh.write(
+                "[tox]\nenvlist = py39\n\n" +  ## noqa
+                "[testenv]\ndeps =" + "".join(
+                    ["\n\t" + x for x in
+                     sorted(
+                         list(self._testreqs.keys()) +  ## noqa
+                         self._fmt_slurp(req_fn).split("\n"))]
+                ) + "\n" + ## noqa
+                "\ncommands = pytest\n")
+        return
 
     def _build_only_command_custom_steps(self):
         return

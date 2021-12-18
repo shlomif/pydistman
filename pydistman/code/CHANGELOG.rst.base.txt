@@ -1,3 +1,6 @@
+0.0.6
+    Add the filter_test_reqs option.
+
 0.0.5
     Add missing attrs dependency to install_requires.
 
