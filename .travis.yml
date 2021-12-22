@@ -1,3 +1,9 @@
+addons:
+    apt:
+        packages:
+            - cargo
+            - rustc
+        update: true
 dist: focal
 install:
 - pip install -U pip
