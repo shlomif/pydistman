@@ -15,12 +15,12 @@ dist_name = "pydistman"
 
 obj = DistManager(
     dist_name=dist_name,
-    dist_version="0.0.6",
+    dist_version="0.0.7",
     project_name="Python Dist Manager",
     project_short_description=(
         "\"Maximum Overkill DRY\" PyPI distribution manager (WiP)"
     ),
-    release_date="2021-08-28",
+    release_date="2021-12-22",
     project_year="2020",
     aur_email="shlomif@cpan.org",
     project_email="shlomif@cpan.org",

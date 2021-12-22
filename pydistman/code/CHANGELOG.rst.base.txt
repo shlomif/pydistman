@@ -1,3 +1,10 @@
+0.0.7
+    Add cli_run()
+
+    Add forceinstall target
+
+    Copy sources to ./dest/code.
+
 0.0.6
     Add the filter_test_reqs option.
 
