@@ -15,6 +15,7 @@ import os.path
 import platform
 import re
 import shutil
+import sys
 from subprocess import check_call
 
 import attr
@@ -344,3 +345,10 @@ class DistManager(object):
             self.command__build()
         else:
             raise BaseException("Unknown sub-command")
+
+    def cli_run(self):
+        try:
+            cmd = sys.argv.pop(1)
+        except IndexError:
+            cmd = 'build'
+        self.run_command(cmd=cmd, args=[])

@@ -11,11 +11,6 @@ sys.path.insert(0, "./code")
 
 from pydistman import DistManager  # noqa: E402
 
-try:
-    cmd = sys.argv.pop(1)
-except IndexError:
-    cmd = 'build'
-
 dist_name = "pydistman"
 
 obj = DistManager(
@@ -32,4 +27,4 @@ obj = DistManager(
     full_name="Shlomi Fish",
     github_username="shlomif",
 )
-obj.run_command(cmd=cmd, args=[])
+obj.cli_run()
