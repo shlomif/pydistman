@@ -278,6 +278,12 @@ class DistManager(object):
         check_call(["bash", "-c",
                     self._myformat("cd {dest_dir} && {tox_cmd}")])
 
+    def command__forceinstall(self):
+        self.command__build()
+        check_call(["bash", "-c", self._myformat(
+            "cd {dest_dir} && pip install ."
+        )])
+
     def command__install(self):
         self.command__build()
         check_call(["bash", "-c", self._myformat(
@@ -328,6 +334,8 @@ class DistManager(object):
             self.command__build()
         elif cmd == 'build_only':
             self.command__build_only()
+        elif cmd == 'forceinstall':
+            self.command__forceinstall()
         elif cmd == 'install':
             self.command__install()
         elif cmd == 'release':
