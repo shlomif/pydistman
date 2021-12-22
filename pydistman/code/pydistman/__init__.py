@@ -94,6 +94,13 @@ class DistManager(object):
             make_exe
         )
 
+    def _dest_codedir_copy(self, bn_proto, make_exe=False):
+        return self._append(
+            "{dest_dir}/{src_dir}/"+bn_proto,
+            "{src_dir}/"+bn_proto,
+            make_exe
+        )
+
     def _re_mutate(self, fn_proto, pattern, repl_fn_proto=None,
                    prefix='', suffix=''):
         fn = self._myformat(fn_proto)
@@ -219,6 +226,7 @@ class DistManager(object):
             pattern="\n0\\.1\\.0\n.*",
             repl_fn_proto="{src_dir}/CHANGELOG.rst.base.txt",
             prefix="\n")
+        self._dest_codedir_copy("CHANGELOG.rst.base.txt")
         s = "COPYRIGHT\n"
         for fn in ["{dest_dir}/README", "{dest_dir}/README.rst",
                    "{dest_dir}/docs/README.rst", ]:
@@ -229,11 +237,13 @@ class DistManager(object):
                 prefix='',
                 suffix=s,
             )
+        self._dest_codedir_copy("README.part.rst")
 
         req_bn = "requirements.txt"
         req_fn = "{src_dir}/" + req_bn
         dest_req_fn = "{dest_dir}/" + req_bn
         self._dest_append(req_bn)
+        self._dest_codedir_copy(req_bn)
 
         self._reqs_mutate(dest_req_fn)
         self._re_mutate(
