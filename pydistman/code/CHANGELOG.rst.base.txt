@@ -1,3 +1,6 @@
+0.0.8
+    Appveyor tests' fix
+
 0.0.7
     Add cli_run()
 

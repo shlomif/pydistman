@@ -47,8 +47,13 @@ class DistManager(object):
         self.dest_modules_dir = self.dest_dir + "/" + dist_name
         system = platform.system().lower()
         self.tox_cmd = (
-            "py -3.9 -m tox"
-            if (('windows' in system) or ('cygwin' in system)) else 'tox')
+            (
+                "py -3.8 -m tox"
+                if os.getenv('APPVEYOR')
+                else "py -3.9 -m tox"
+            ) if (('windows' in system) or ('cygwin' in system))
+            else 'tox'
+        )
 
     def _slurp(self, fn):
         with open(fn, "rt") as ifh:
