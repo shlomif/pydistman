@@ -1,3 +1,6 @@
+0.0.9
+    Fix runtime use of entry_point ( cookiecutter regression )
+
 0.0.8
     Appveyor tests' fix
 

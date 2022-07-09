@@ -208,7 +208,7 @@ class DistManager(object):
             no_input=True,
             overwrite_if_exists=True,
             extra_context={
-                "entry_point": ["none", "cli", "gui", ],
+                "entry_point": "cli",
                 "project_name": self.project_name,
                 "project_short_description": self.project_short_description,
                 "release_date": self.release_date,
