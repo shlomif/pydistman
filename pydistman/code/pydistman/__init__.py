@@ -263,7 +263,7 @@ class DistManager(object):
             self._dest_append(fn, make_exe=True)
         with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
             ofh.write(
-                "[tox]\nenvlist = py39\n\n" +
+                "[tox]\nenvlist = py311\n\n" +
                 "[testenv]\ndeps =" + "".join(
                     ["\n\t" + x for x in
                      self._fmt_slurp(req_fn).split("\n")]) + "\n" +
@@ -277,7 +277,7 @@ class DistManager(object):
         req_fn = "{src_dir}/" + req_bn
         with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
             ofh.write(
-                "[tox]\nenvlist = py39\n\n" +  ## noqa
+                "[tox]\nenvlist = py311\n\n" +  ## noqa
                 "[testenv]\ndeps =" + "".join(
                     ["\n\t" + x for x in
                      sorted(
