@@ -15,8 +15,8 @@ import os.path
 import platform
 import re
 import shutil
-import sys
 from subprocess import check_call
+import sys
 
 import attr
 
@@ -36,8 +36,8 @@ class DistManager(object):
     full_name = attr.ib()
     github_username = attr.ib()
     filter_test_reqs = attr.ib(default=False)
+    tox_envlist = attr.ib(default="py312")
 
-    """docstring for DistManager"""
     def __attrs_post_init__(self):
         dist_name = self.dist_name
         self.base_dir = ("python-" + dist_name)
@@ -263,7 +263,7 @@ class DistManager(object):
             self._dest_append(fn, make_exe=True)
         with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
             ofh.write(
-                "[tox]\nenvlist = py311\n\n" +
+                "[tox]\nenvlist = " + self._calc_tox_envlist() + "\n\n" +
                 "[testenv]\ndeps =" + "".join(
                     ["\n\t" + x for x in
                      self._fmt_slurp(req_fn).split("\n")]) + "\n" +
@@ -277,7 +277,7 @@ class DistManager(object):
         req_fn = "{src_dir}/" + req_bn
         with open(self._myformat("{dest_dir}/tox.ini"), "wt") as ofh:
             ofh.write(
-                "[tox]\nenvlist = py311\n\n" +  ## noqa
+                "[tox]\nenvlist = " + self._calc_tox_envlist() + "\n\n" +
                 "[testenv]\ndeps =" + "".join(
                     ["\n\t" + x for x in
                      sorted(
@@ -289,6 +289,9 @@ class DistManager(object):
 
     def _build_only_command_custom_steps(self):
         return
+
+    def _calc_tox_envlist(self):
+        return self.tox_envlist
 
     def command__test(self):
         check_call(["bash", "-c",

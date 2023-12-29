@@ -1,3 +1,6 @@
+0.0.10
+    Add tox_envlist
+
 0.0.9
     Fix runtime use of entry_point ( cookiecutter regression )
 
