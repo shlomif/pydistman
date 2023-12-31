@@ -20,7 +20,7 @@ obj = DistManager(
     project_short_description=(
         "\"Maximum Overkill DRY\" PyPI distribution manager (WiP)"
     ),
-    release_date="2022-07-09",
+    release_date="2023-12-31",
     project_year="2020",
     aur_email="shlomif@cpan.org",
     project_email="shlomif@cpan.org",
