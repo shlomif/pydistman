@@ -16,6 +16,10 @@ import subprocess
 os.chdir("pydistman")
 subprocess.check_call([
     "bash", "-e", "-x", "-c",
-    ("python3 python_pypi_dist_manager.py test &&" +
-     "cat dest/README.rst > ../README.rst"),
+    "python3 python_pypi_dist_manager.py test",
 ])
+
+bn = "README.rst"
+with open("dest/{bn}".format(bn=bn,), "rt") as in_fh:
+    with open("../{bn}".format(bn=bn,), "wt") as out_fh:
+        out_fh.write(in_fh.read())
