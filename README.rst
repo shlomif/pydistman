@@ -4,8 +4,8 @@ Python Dist Manager.  "Maximum Overkill DRY" PyPI distribution manager (WiP)
 :Info: This is the README file for Python Dist Manager.
 :Author: Shlomi Fish <shlomif@cpan.org>
 :Copyright: © 2020, Shlomi Fish.
-:Date: 2021-08-28
-:Version: 0.0.5
+:Date: 2023-12-31
+:Version: 0.0.10
 
 .. index: README
 .. image:: https://travis-ci.org/shlomif/pydistman.svg?branch=master
@@ -32,7 +32,20 @@ For some examples see:
 
 * https://github.com/shlomif/black-hole-solitaire/tree/master/black-hole-solitaire/python-bindings/cffi
 
+* https://github.com/shlomif/modint/tree/master/modint
+
+* https://github.com/shlomif/pydistman
+
+* https://github.com/shlomif/pysol_cards
+
+* https://github.com/shlomif/rebookmaker/tree/master/epub_maker
+
 * https://github.com/shlomif/sum_walker
+
+* https://github.com/shlomif/python-vnu_validator
+
+* https://github.com/shlomif/zenfilter
+
 
 ``python3 python_pypi_dist_manager.py test``
 
