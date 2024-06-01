@@ -10,10 +10,12 @@
 
 """
 
+import os
 import subprocess
 
+os.chdir("pydistman")
 subprocess.check_call([
     "bash", "-e", "-x", "-c",
-    ("cd pydistman/ && python3 python_pypi_dist_manager.py test &&" +
+    ("python3 python_pypi_dist_manager.py test &&" +
      "cat dest/README.rst > ../README.rst"),
 ])
