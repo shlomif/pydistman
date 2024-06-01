@@ -15,8 +15,7 @@ import subprocess
 
 os.chdir("pydistman")
 subprocess.check_call([
-    "bash", "-e", "-x", "-c",
-    "python3 python_pypi_dist_manager.py test",
+    "python3", "python_pypi_dist_manager.py", "test",
 ])
 
 bn = "README.rst"
