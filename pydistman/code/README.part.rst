@@ -5,14 +5,16 @@ A work-in-progress manager for PyPI-like python distributions which aims to
 be a "maximum overkill" don't-repeat yourself manager with a user
 experience similar to Dist-Zilla ( http://dzil.org/ ).
 
-Currently it is functional, but a far cry from our vision.
+Currently it is functional, but still a far cry from our vision.
 
-What pydistman does differently from many PyPI-distribution-generating "cookiecutters"
-is generate a fresh-full-fledged (and possibly one with recent improvements) distribution
-on every build-command, including ones to test local changes. Currently,
-pydistman piggy-backs a lot-of-the heavy-lifting to Chris Warrick’s Python
-Project Template ( https://chriswarrick.com/projects/python-project-template/ ) and
-we thank him for his work.
+Pydistman’s main improvement (or its “secret-sauce”) over many
+PyPI-distribution-generating "cookiecutters" is that it generates a
+fresh-full-fledged (and possibly one with recent improvements) distribution on
+every build-command, including such build-commands intended to test local
+changes. Currently, pydistman delegates a lot-of-the heavy-lifting to Chris
+Warrick’s Python Project Template (
+https://chriswarrick.com/projects/python-project-template/ ) and we thank him
+for his work.
 
 INSTALLATION
 ------------
@@ -40,6 +42,10 @@ For some examples see:
 
 * https://github.com/shlomif/zenfilter
 
+Commands
+~~~~~~~~
+
+One can issue sub-commands, like:
 
 ``python3 python_pypi_dist_manager.py test``
 
