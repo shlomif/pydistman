@@ -15,9 +15,10 @@ Non-pressing
 * Traverse the source directory tree for input +*.py+ files and copy/append
 them all.
 
-* Create an class to abstract source→dest path operations.
+* Create a class to abstract source→dest path operations.
 
 * Extract a base module for the dist_manager and bootstrap it.
+    * DONE I think.
 
 [id="to_be_considered"]
 To be considered
