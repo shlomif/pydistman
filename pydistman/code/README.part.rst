@@ -1,3 +1,9 @@
+Hi all!
+
+I have been working on "pydistman", which is a manager for PyPI-like
+distributions, that I think scratches a long-time itch I've been having. Here
+is the pitch about it.
+
 PURPOSE
 -------
 

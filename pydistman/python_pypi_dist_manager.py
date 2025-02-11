@@ -26,5 +26,6 @@ obj = DistManager(
     project_email="shlomif@cpan.org",
     full_name="Shlomi Fish",
     github_username="shlomif",
+    tox_envlist="py313",
 )
 obj.cli_run()
