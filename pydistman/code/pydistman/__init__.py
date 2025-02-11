@@ -35,6 +35,7 @@ class DistManager(object):
     project_email = attr.ib()
     full_name = attr.ib()
     github_username = attr.ib()
+    entry_point = attr.ib(default="cli")
     filter_test_reqs = attr.ib(default=False)
     tox_envlist = attr.ib(default="py312")
 
@@ -208,7 +209,7 @@ class DistManager(object):
             no_input=True,
             overwrite_if_exists=True,
             extra_context={
-                "entry_point": "cli",
+                "entry_point": self.entry_point,
                 "project_name": self.project_name,
                 "project_short_description": self.project_short_description,
                 "release_date": self.release_date,
